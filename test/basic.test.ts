@@ -22,10 +22,23 @@ describe("middleware", async () => {
       const response = await $fetch("/api/users", { method: "GET" });
       expect(true).toBe(false);
     } catch (err) {
-      expect(err.status).toBe(401);
+      expect(err.statusCode).toBe(401);
+      expect(err.statusMessage).toBe("Missing Authentication header");
     }
   });
 
-  it.todo("deny access with an invalid token");
+  it("deny access with an invalid token", async () => {
+    try {
+      const response = await $fetch("/api/users", {
+        method: "GET",
+        headers: { token: "invalidTestToken" },
+      });
+      expect(true).toBe(false);
+    } catch (err) {
+      expect(err.statusCode).toBe(401);
+      expect(err.statusMessage).toBe("Authentication error");
+    }
+  });
+
   it.todo("allow access with vaid token");
 });
