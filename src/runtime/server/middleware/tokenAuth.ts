@@ -22,8 +22,12 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  //const user = await prisma.users.findFirst({ where: { token } })
-  //if (!user) {
-  throw createError({ statusCode: 401, statusMessage: "Authentication error" });
-  //}
+  const prisma = usePrismaClient();
+  const user = await prisma.users.findFirst({ where: { token } });
+  if (!user) {
+    throw createError({
+      statusCode: 401,
+      statusMessage: "Authentication error",
+    });
+  }
 });

@@ -3,6 +3,7 @@ import {
   addPlugin,
   createResolver,
   addServerHandler,
+  addImportsDir,
 } from "@nuxt/kit";
 
 // Module options TypeScript interface definition
@@ -25,6 +26,8 @@ export default defineNuxtModule<ModuleOptions>({
 
   setup(options, nuxt) {
     const resolver = createResolver(import.meta.url);
+
+    addImportsDir(resolver.resolve("./runtime/composables"));
 
     addServerHandler({
       middleware: true,
