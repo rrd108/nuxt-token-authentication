@@ -17,7 +17,7 @@ export default defineEventHandler(async (event) => {
     return;
   }
 
-  const token = getHeader(event, "Token");
+  const token = getHeader(event, options.tokenHeader);
   if (!token) {
     throw createError({
       statusCode: 401,

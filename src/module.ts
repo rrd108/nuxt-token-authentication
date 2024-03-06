@@ -7,6 +7,7 @@ import {
 
 // Module options TypeScript interface definition
 export interface ModuleOptions {
+  tokenHeader: string;
   noAuthRoutes: string[];
 }
 
@@ -18,6 +19,7 @@ export default defineNuxtModule<ModuleOptions>({
 
   // Default configuration options of the Nuxt module
   defaults: {
+    tokenHeader: "Token",
     noAuthRoutes: [],
   },
 

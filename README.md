@@ -40,6 +40,7 @@ npm install --save-dev nuxt-token-authentication
 export default defineNuxtConfig({
   modules: ["nuxt-token-authentication"],
   nuxtTokenAuthentication: {
+    tokenHeader: "Token",
     noAuthRoutes: ["POST:/api/auth/getToken"],
   },
 });
