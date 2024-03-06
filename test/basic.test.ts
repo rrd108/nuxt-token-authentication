@@ -12,9 +12,9 @@ describe("middleware", async () => {
     expect(response).toContain("<div>basic</div>");
   });
 
-  it.skip("allow access to noAuthRoute", async () => {
+  it("allow access to noAuthRoute", async () => {
     const response = await $fetch("/api/route_noauth", { method: "GET" });
-    expect(response).toContain("Gauranga");
+    expect(response.result).toBe("Gauranga");
   });
 
   it("deny acces without a token", async () => {
