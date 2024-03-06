@@ -40,5 +40,7 @@ describe("middleware", async () => {
     }
   });
 
+  // TODO move test db to sqlite
+
   it.todo("allow access with vaid token");
 });
