@@ -39,10 +39,13 @@ npm install --save-dev nuxt-token-authentication
 ```js
 export default defineNuxtConfig({
   modules: ["nuxt-token-authentication"],
+  nuxtTokenAuthentication: {
+    noAuthRoutes: ["POST:/api/auth/getToken"],
+  },
 });
 ```
 
-That's it! You can now use My Module in your Nuxt app ✨
+That's it! You can now use Nuxt Token Authentication in your Nuxt app ✨
 
 ## Development
 

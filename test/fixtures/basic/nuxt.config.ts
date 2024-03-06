@@ -1,7 +1,8 @@
-import MyModule from '../../../src/module'
+import NuxtTokenAuthentication from "../../../src/module";
 
 export default defineNuxtConfig({
-  modules: [
-    MyModule
-  ]
-})
+  modules: [NuxtTokenAuthentication],
+  nuxtTokenAuthentication: {
+    noAuthRoutes: ["GET:/api/route_noauth"],
+  },
+});
