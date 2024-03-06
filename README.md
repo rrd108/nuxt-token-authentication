@@ -48,17 +48,19 @@ export default defineNuxtConfig({
 
 3. Set Prisma schema
 
-3.1. In your `/.env` file, set the `DATABASE_URL` environment variable to point to your existing database. If your database has no tables yet, read [Getting Started with Prisma](https://pris.ly/d/getting-started).
+3.1. `npx prisma init` to create a new Prisma schema file or use an existing one.
+
+3.2. In your `/.env` file, set the `DATABASE_URL` environment variable to point to your existing database. If your database has no tables yet, read [Getting Started with Prisma](https://pris.ly/d/getting-started).
 
 ```env
 DATABASE_URL="postgresql://johndoe:randompassword@localhost:5432/mydb?schema=public"
 ```
 
-3.2. Set the provider of the datasource block in schema.prisma to match your database: postgresql, mysql, sqlite, sqlserver, mongodb or cockroachdb.
+3.3. Set the provider of the datasource block in schema.prisma to match your database: postgresql, mysql, sqlite, sqlserver, mongodb or cockroachdb.
 
-3.3. Run `npx prisma db pull` to turn your database schema into a Prisma schema.
+3.4. Run `npx prisma db pull` to turn your database schema into a Prisma schema.
 
-3.4. Run `npx prisma generate` to generate the Prisma Client. You can then start querying your database.
+3.5. Run `npx prisma generate` to generate the Prisma Client. You can then start querying your database.
 
 That's it! You can now use Nuxt Token Authentication in your Nuxt app ✨
 
