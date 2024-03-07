@@ -1,6 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { fileURLToPath } from "node:url";
 import { setup, $fetch } from "@nuxt/test-utils/e2e";
+import exp from "node:constants";
 
 describe("middleware", async () => {
   await setup({
@@ -40,7 +41,11 @@ describe("middleware", async () => {
     }
   });
 
-  // TODO move test db to sqlite
-
-  it.todo("allow access with vaid token");
+  it("allow access with vaid token", async () => {
+    const response = await $fetch("/api/users", {
+      method: "GET",
+      headers: { token: "270fsdg04%rt2f6$)b4eblok0dfgaurannga" },
+    });
+    expect(response.results[0].name).toBe("Gauranga");
+  });
 });

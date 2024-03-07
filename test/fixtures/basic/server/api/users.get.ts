@@ -1,3 +1,3 @@
 export default defineEventHandler(async (event) => {
-  return { result: "Gauranga" };
+  return { results: [{ id: 1, name: "Gauranga" }] };
 });
