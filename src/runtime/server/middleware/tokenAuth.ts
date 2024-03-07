@@ -1,3 +1,7 @@
+//import { usePrismaClient } from "../../composables/usePrismaClient.server";
+import { PrismaClient } from "@prisma/client";
+const prisma = new PrismaClient();
+
 export default defineEventHandler(async (event) => {
   // check if the requested route starts with api
   if (!event.node.req.url?.startsWith("/api/")) {
@@ -22,7 +26,6 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  const prisma = usePrismaClient();
   const user = await prisma.users.findFirst({ where: { token } });
   if (!user) {
     throw createError({
