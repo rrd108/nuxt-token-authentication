@@ -60,6 +60,8 @@ DATABASE_URL="postgresql://johndoe:randompassword@localhost:5432/mydb?schema=pub
 
 3.4. Run `npx prisma db pull` to turn your database schema into a Prisma schema.
 
+TODO `npx prisma db push` and seeding `npx prisma db seed`
+
 3.5. Run `npx prisma generate` to generate the Prisma Client. You can then start querying your database.
 
 That's it! You can now use Nuxt Token Authentication in your Nuxt app ✨
