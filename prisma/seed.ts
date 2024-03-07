@@ -7,7 +7,7 @@ async function seed() {
   const data = {
     email: "rrd@webmania.cc",
     password: "bd0f17042ff2f6733b4ebb30dfa68f5a",
-    token: "270fsdg04%rt2f6$)b4eblok0dfgaurannga",
+    token: "270fsdg04%rt2f6$)b4eblok0dfgauranga",
   };
 
   try {

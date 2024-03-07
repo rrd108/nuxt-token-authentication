@@ -48,6 +48,8 @@ export default defineNuxtConfig({
 
 3. Set Prisma schema
 
+Set it from command line: https://www.prisma.io/docs/orm/reference/prisma-cli-reference#init
+
 3.1. `npx prisma init` to create a new Prisma schema file or use an existing one.
 
 3.2. In your `/.env` file, set the `DATABASE_URL` environment variable to point to your existing database. If your database has no tables yet, read [Getting Started with Prisma](https://pris.ly/d/getting-started).
