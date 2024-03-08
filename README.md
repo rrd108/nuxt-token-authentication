@@ -5,23 +5,23 @@
 [![License][license-src]][license-href]
 [![Nuxt][nuxt-src]][nuxt-href]
 
-Token Authentication for Nuxt server APIs for doing amazing things.
+This Nuxt module simplifies user authentication using HTTP headers, streamlining the integration of token-based authorization into your application.
 
 - [✨ &nbsp;Release Notes](/CHANGELOG.md)
   <!-- - [🏀 Online playground](https://stackblitz.com/github/your-org/nuxt-token-authentication?file=playground%2Fapp.vue) -->
-  <!-- - [📖 &nbsp;Documentation](https://example.com) -->
+- [📖 &nbsp;Documentation](https://github.com/rrd108/nuxt-token-authentication)
 
 ## Features
 
-<!-- Highlight some of the features your module provide here -->
-
-- ⛰ &nbsp;Foo
-- 🚠 &nbsp;Bar
-- 🌲 &nbsp;Baz
+- **Flexible Authentication:** Supports various database backends (MySQL, SQLite, MongoDB, Microsoft SQL Server, PlanetScale, CockroachDB, Supabase, Neon, Turso) for user and token management.
+- **Customizable Token Handling:** You can configure the token header and the routes that do not require authentication.
+- **Streamlined Integration:** Easy setup with minimal configuration.
+- **Seamless error handling** for authentication failures.
+- **Production-Ready:** Secure practices for handling sensitive token data.
 
 ## Quick Setup
 
-1. Add `nuxt-token-authentication` dependency to your project
+### 1. Add `nuxt-token-authentication` dependency to your project
 
 ```bash
 # Using pnpm
@@ -34,35 +34,36 @@ yarn add --dev nuxt-token-authentication
 npm install --save-dev nuxt-token-authentication
 ```
 
-2. Add `nuxt-token-authentication` to the `modules` section of `nuxt.config.ts`
+### 2. Add `nuxt-token-authentication` to the `modules` section of `nuxt.config.ts`
 
 ```js
 export default defineNuxtConfig({
   modules: ["nuxt-token-authentication"],
   nuxtTokenAuthentication: {
-    tokenHeader: "Token",
-    noAuthRoutes: ["POST:/api/auth/getToken"],
+    tokenHeader: "Token", // or "Authorization", or anything else you use for the header
+    // prefix: "Bearer"
+    noAuthRoutes: ["POST:/api/auth/getToken"], // list of routes that do not require authentication
   },
 });
 ```
 
-3. Set Prisma schema
+### 3. Set Prisma schema
 
-Set it from command line: https://www.prisma.io/docs/orm/reference/prisma-cli-reference#init
+The module will install Prisma for you. You can use the following steps to set up Prisma. We assume you have an existing database, with at least one table to store the users, and the table has a column for the token, named `token`.
 
-3.1. `npx prisma init` to create a new Prisma schema file or use an existing one.
+3.1. `npx prisma init` to create a new Prisma schema file. It will create a new directory called `prisma` with a `schema.prisma` file inside it.
 
 3.2. In your `/.env` file, set the `DATABASE_URL` environment variable to point to your existing database. If your database has no tables yet, read [Getting Started with Prisma](https://pris.ly/d/getting-started).
+
+Supported databases: PostgreSQL, MySQL, SQLite, MongoDB, Microsoft SQL Server, PlanetScale, CockroachDB, Supabase, Neon, Turso
 
 ```env
 DATABASE_URL="postgresql://johndoe:randompassword@localhost:5432/mydb?schema=public"
 ```
 
-3.3. Set the provider of the datasource block in schema.prisma to match your database: postgresql, mysql, sqlite, sqlserver, mongodb or cockroachdb.
+3.3. Set the provider of the datasource block in `schema.prisma` to match your database.
 
 3.4. Run `npx prisma db pull` to turn your database schema into a Prisma schema.
-
-TODO `npx prisma db push` and seeding `npx prisma db seed`
 
 3.5. Run `npx prisma generate` to generate the Prisma Client. You can then start querying your database.
 
@@ -72,26 +73,32 @@ That's it! You can now use Nuxt Token Authentication in your Nuxt app ✨
 
 ```bash
 # Install dependencies
-npm install
+yarn
 
 # Generate type stubs
-npm run dev:prepare
+yarn dev:prepare
 
 # Develop with the playground
-npm run dev
+yarn dev
 
 # Build the playground
-npm run dev:build
+yarn dev:build
 
 # Run ESLint
-npm run lint
+yarn lint
+
+# Set up for testing
+npx prisma db push
+npx prisma db seed
+# and create .env files for the test folders with DATABASE_URL="file:/fullPath/prisma/dev.db"
+
 
 # Run Vitest
-npm run test
-npm run test:watch
+yarn test
+yarn test:watch
 
 # Release new version
-npm run release
+yarn release
 ```
 
 <!-- Badges -->
