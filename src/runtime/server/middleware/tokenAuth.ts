@@ -1,6 +1,6 @@
 //import { usePrismaClient } from "../../composables/usePrismaClient.server";
 import { PrismaClient } from "@prisma/client";
-import { defineEventHandler } from "h3";
+import { createError, defineEventHandler, getHeader } from "h3";
 import { useRuntimeConfig } from "#imports";
 
 export default defineEventHandler(async (event) => {
