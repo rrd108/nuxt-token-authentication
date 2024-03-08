@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v0.0.5
+
+[compare changes](https://github.com/rrd108/nuxt-token-authentication/compare/v0.0.4...v0.0.5)
+
+### 🩹 Fixes
+
+- Add missing import ([5bc6df0](https://github.com/rrd108/nuxt-token-authentication/commit/5bc6df0))
+
+### ❤️ Contributors
+
+- Daniel Roe ([@danielroe](http://github.com/danielroe))
+
 ## v0.0.3
 
 [compare changes](https://github.com/rrd108/nuxt-token-authentication/compare/v0.0.2...v0.0.3)
