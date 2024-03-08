@@ -25,10 +25,13 @@ export default defineEventHandler(async (event) => {
     });
   }
 
+  const strippedToken = token
+    .toLowerCase()
+    .replace(`${options.prefix?.toLowerCase()} `, "");
   let user;
   try {
     const prisma = new PrismaClient();
-    user = await prisma.users.findFirst({ where: { token } });
+    user = await prisma.users.findFirst({ where: { token: strippedToken } });
   } catch (error) {
     console.error({ error });
   }
