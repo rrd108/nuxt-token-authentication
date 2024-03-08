@@ -95,6 +95,9 @@ export default defineEventHandler(async (event) => {
 });
 ```
 
+Now you can send a `POST` request to `/api/auth/getToken` with 2 fields in the body: `email` and `password`. If the user exists, the server will return the user's data, including the token.
+Any other routes (except the ones you set in `noAuthRoutes`) will require the token to be sent in the header.
+
 ## Development
 
 ```bash
