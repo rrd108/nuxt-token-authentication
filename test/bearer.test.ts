@@ -9,7 +9,7 @@ describe("middleware", async () => {
 
   it("deny access with an invalid token", async () => {
     try {
-      const response = await $fetch("/api/users", {
+      await $fetch("/api/users", {
         method: "GET",
         headers: { authorization: "invalidTestToken" },
       });

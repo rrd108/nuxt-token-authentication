@@ -7,7 +7,7 @@ import {
 
 // Module options TypeScript interface definition
 export interface ModuleOptions {
-  tokenHeader?: string;
+  tokenHeader: string;
   prefix?: string;
   noAuthRoutes: string[];
 }

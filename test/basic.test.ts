@@ -19,7 +19,7 @@ describe("middleware", async () => {
 
   it("deny acces without a token", async () => {
     try {
-      const response = await $fetch("/api/users", { method: "GET" });
+      await $fetch("/api/users", { method: "GET" });
       expect(true).toBe(false);
     } catch (err) {
       const typedErr = err as { statusCode: number; statusMessage: string };
@@ -30,7 +30,7 @@ describe("middleware", async () => {
 
   it("deny access with an invalid token", async () => {
     try {
-      const response = await $fetch("/api/users", {
+      await $fetch("/api/users", {
         method: "GET",
         headers: { token: "invalidTestToken" },
       });
