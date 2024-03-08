@@ -25,13 +25,13 @@ This Nuxt module simplifies user authentication using HTTP headers, streamlining
 
 ```bash
 # Using pnpm
-pnpm add -D nuxt-token-authentication
+pnpm add nuxt-token-authentication
 
 # Using yarn
-yarn add --dev nuxt-token-authentication
+yarn add nuxt-token-authentication
 
 # Using npm
-npm install --save-dev nuxt-token-authentication
+npm install nuxt-token-authentication
 ```
 
 ### 2. Add `nuxt-token-authentication` to the `modules` section of `nuxt.config.ts`
