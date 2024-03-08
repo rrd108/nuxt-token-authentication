@@ -40,7 +40,7 @@ describe("middleware", async () => {
     }
   });
 
-  it("allow access with vaid token", async () => {
+  it("allow access with valid token", async () => {
     const response = await $fetch("/api/users", {
       method: "GET",
       headers: { token: "270fsdg04%rt2f6$)b4eblok0dfgauranga" },
