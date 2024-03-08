@@ -69,6 +69,32 @@ DATABASE_URL="postgresql://johndoe:randompassword@localhost:5432/mydb?schema=pub
 
 That's it! You can now use Nuxt Token Authentication in your Nuxt app ✨
 
+## Creating the API endpoints
+
+Let's suppose you want to authenticate the users at the url `api/auth/getToken` with a `POST` request. You can use the following code to create the API endpoint.
+
+Create a file at `/server/api/auth/getToken.post.ts` with the following code. Feel free to modify if your users table does not identify the users by their email and password but other fields.
+Do not forget to change `data.password` (coming from the user's request) to a **hashed password**.
+
+```ts
+import { PrismaClient } from "@prisma/client";
+const prisma = new PrismaClient();
+
+export default defineEventHandler(async (event) => {
+  const data = await readBody(event);
+
+  const user = await prisma.users.findUnique({
+    where: {
+      email: data.email,
+      password: data.password,
+    },
+  });
+
+  delete user?.password;
+  return { user };
+});
+```
+
 ## Development
 
 ```bash
