@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v0.0.11
+
+[compare changes](https://github.com/rrd108/nuxt-token-authentication/compare/v0.0.10...v0.0.11)
+
+### 🏡 Chore
+
+- **release:** V0.0.10 ([2eeb30c](https://github.com/rrd108/nuxt-token-authentication/commit/2eeb30c))
+
+### ❤️ Contributors
+
+- Rrd108 <rrd@webmania.cc>
+
 ## v0.0.10
 
 [compare changes](https://github.com/rrd108/nuxt-token-authentication/compare/v0.0.9...v0.0.10)
