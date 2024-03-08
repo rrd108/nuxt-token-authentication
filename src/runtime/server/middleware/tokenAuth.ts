@@ -1,5 +1,6 @@
 //import { usePrismaClient } from "../../composables/usePrismaClient.server";
 import { PrismaClient } from "@prisma/client";
+import { defineEventHandler } from "h3";
 
 export default defineEventHandler(async (event) => {
   // check if the requested route starts with api
