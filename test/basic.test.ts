@@ -22,8 +22,9 @@ describe("middleware", async () => {
       const response = await $fetch("/api/users", { method: "GET" });
       expect(true).toBe(false);
     } catch (err) {
-      expect(err.statusCode).toBe(401);
-      expect(err.statusMessage).toBe("Missing Authentication header");
+      const typedErr = err as { statusCode: number; statusMessage: string };
+      expect(typedErr.statusCode).toBe(401);
+      expect(typedErr.statusMessage).toBe("Missing Authentication header");
     }
   });
 
@@ -35,8 +36,9 @@ describe("middleware", async () => {
       });
       expect(true).toBe(false);
     } catch (err) {
-      expect(err.statusCode).toBe(401);
-      expect(err.statusMessage).toBe("Authentication error");
+      const typedErr = err as { statusCode: number; statusMessage: string };
+      expect(typedErr.statusCode).toBe(401);
+      expect(typedErr.statusMessage).toBe("Authentication error");
     }
   });
 
