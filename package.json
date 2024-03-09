@@ -5,6 +5,11 @@
   "repository": "rrd108/nuxt-token-authentication",
   "license": "MIT",
   "type": "module",
+  "keywords": [
+    "nuxt",
+    "nuxt-module",
+    "authentication"
+  ],
   "exports": {
     ".": {
       "types": "./dist/types.d.ts",
