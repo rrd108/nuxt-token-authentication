@@ -9,7 +9,7 @@ import {
 export interface ModuleOptions {
   authTable?: string;
   tokenField?: string;
-  tokenHeader: string;
+  tokenHeader?: string;
   prefix?: string;
   noAuthRoutes: string[];
 }
