@@ -4,7 +4,8 @@ const prisma = new PrismaClient();
 export default defineEventHandler(async (event) => {
   const data = await readBody(event);
 
-  const user = await prisma.users.findUnique({
+  const options = useRuntimeConfig().public.nuxtTokenAuthentication;
+  const user = await prisma[options.authTable].findUnique({
     where: {
       email: data.email,
       password: data.password,

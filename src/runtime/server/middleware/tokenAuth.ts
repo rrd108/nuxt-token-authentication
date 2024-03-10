@@ -33,12 +33,13 @@ export default defineEventHandler(async (event) => {
   let user;
   try {
     const prisma = new PrismaClient();
-    user = await prisma.users.findFirst({ where: { token: strippedToken } });
+    user = await prisma[options.authTable].findFirst({
+      where: { [options.tokenField]: strippedToken },
+    });
   } catch (error) {
     console.error({ error });
   }
 
-  console.log({ user });
   if (!user) {
     throw createError({
       statusCode: 401,

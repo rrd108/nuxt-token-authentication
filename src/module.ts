@@ -7,6 +7,8 @@ import {
 
 // Module options TypeScript interface definition
 export interface ModuleOptions {
+  authTable?: string;
+  tokenField?: string;
   tokenHeader: string;
   prefix?: string;
   noAuthRoutes: string[];
@@ -20,7 +22,10 @@ export default defineNuxtModule<ModuleOptions>({
 
   // Default configuration options of the Nuxt module
   defaults: {
+    authTable: "users",
+    tokenField: "token",
     tokenHeader: "Token",
+    prefix: "",
     noAuthRoutes: [],
   },
 

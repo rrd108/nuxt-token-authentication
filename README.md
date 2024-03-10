@@ -40,8 +40,10 @@ npm install nuxt-token-authentication
 export default defineNuxtConfig({
   modules: ["nuxt-token-authentication"],
   nuxtTokenAuthentication: {
-    tokenHeader: "Token", // or "Authorization", or anything else you use for the header
-    // prefix: "Bearer"
+    //authTable: "users", // users table name, default: "users"
+    //tokenField: "token",  // name of the filed in your table that stores the token, default: "token"
+    //tokenHeader: "Token", // name of the authentication header, you can use or "Authorization", or anything else you want, default: "Token"
+    // prefix: "Bearer" // value used to prefix the token's value, default is empty
     noAuthRoutes: ["POST:/api/auth/getToken"], // list of routes that do not require authentication
   },
 });
@@ -83,7 +85,8 @@ const prisma = new PrismaClient();
 export default defineEventHandler(async (event) => {
   const data = await readBody(event);
 
-  const user = await prisma.users.findUnique({
+  const options = useRuntimeConfig().public.nuxtTokenAuthentication;
+  const user = await prisma[options.authTable].findUnique({
     where: {
       email: data.email,
       password: data.password,
