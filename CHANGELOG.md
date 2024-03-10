@@ -1,6 +1,23 @@
 # Changelog
 
 
+## v0.1.1
+
+[compare changes](https://github.com/rrd108/nuxt-token-authentication/compare/v0.0.11...v0.1.1)
+
+### 🚀 Enhancements
+
+- Uath table and filed name can be set from config fix #6 ([#6](https://github.com/rrd108/nuxt-token-authentication/issues/6))
+- Add tokenHeader as optional ([82a797a](https://github.com/rrd108/nuxt-token-authentication/commit/82a797a))
+
+### 🏡 Chore
+
+- Defu added ([3cee26e](https://github.com/rrd108/nuxt-token-authentication/commit/3cee26e))
+
+### ❤️ Contributors
+
+- Rrd108 <rrd@webmania.cc>
+
 ## v0.0.11
 
 [compare changes](https://github.com/rrd108/nuxt-token-authentication/compare/v0.0.10...v0.0.11)
