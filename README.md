@@ -41,7 +41,7 @@ export default defineNuxtConfig({
   modules: ["nuxt-token-authentication"],
   nuxtTokenAuthentication: {
     //authTable: "users", // users table name, default: "users"
-    //tokenField: "token",  // name of the filed in your table that stores the token, default: "token"
+    //tokenField: "token",  // name of the field in your table that stores the token, default: "token"
     //tokenHeader: "Token", // name of the authentication header, you can use or "Authorization", or anything else you want, default: "Token"
     // prefix: "Bearer" // value used to prefix the token's value, default is empty
     noAuthRoutes: ["POST:/api/auth/getToken"], // list of routes that do not require authentication
