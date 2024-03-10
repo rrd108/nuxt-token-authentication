@@ -4,6 +4,7 @@ import {
   createResolver,
   addServerHandler,
 } from "@nuxt/kit";
+import defu from "defu";
 
 // Module options TypeScript interface definition
 export interface ModuleOptions {
@@ -37,7 +38,10 @@ export default defineNuxtModule<ModuleOptions>({
       handler: resolver.resolve("./runtime/server/middleware/tokenAuth"),
     });
 
-    nuxt.options.runtimeConfig.public.nuxtTokenAuthentication = options;
+    nuxt.options.runtimeConfig.public.nuxtTokenAuthentication = defu(
+      nuxt.options.runtimeConfig.public.nuxtTokenAuthentication,
+      options
+    );
 
     // Do not add the extension since the `.ts` will be transpiled to `.mjs` after `npm run prepack`
     addPlugin(resolver.resolve("./runtime/plugin"));

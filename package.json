@@ -34,7 +34,8 @@
   },
   "dependencies": {
     "@nuxt/kit": "^3.10.3",
-    "@prisma/client": "5.10.2"
+    "@prisma/client": "5.10.2",
+    "defu": "^6.1.4"
   },
   "devDependencies": {
     "@nuxt/devtools": "latest",
