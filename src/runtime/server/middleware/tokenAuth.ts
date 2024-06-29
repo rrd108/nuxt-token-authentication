@@ -1,5 +1,3 @@
-//import { usePrismaClient } from "../../composables/usePrismaClient.server";
-import { PrismaClient } from "@prisma/client";
 import { createError, defineEventHandler, getHeader } from "h3";
 import { useRuntimeConfig } from "#imports";
 
@@ -27,15 +25,14 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  const strippedToken = token
-    .toLowerCase()
-    .replace(`${options.prefix?.toLowerCase()} `, "");
+  const strippedToken = token.replace(`${options.prefix} `, "");
   let user;
   try {
-    const prisma = new PrismaClient();
-    user = await prisma[options.authTable].findFirst({
-      where: { [options.tokenField]: strippedToken },
-    });
+    const db = useDatabase();
+    // for table names we need and extra {} - see https://github.com/unjs/db0/issues/77
+    const { rows } =
+      await db.sql`SELECT * FROM {${options.authTable}} WHERE {${options.tokenField}} = ${strippedToken} LIMIT 1`;
+    user = rows[0];
   } catch (error) {
     console.error({ error });
   }

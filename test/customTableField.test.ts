@@ -26,8 +26,8 @@ describe("middleware", async () => {
   it("allow access with valid token", async () => {
     const response = await $fetch("/api/users", {
       method: "GET",
-      headers: { token: "270fsdg04%rt2f6$)b4eblok0dfgauranga" },
+      headers: { token: "++Gauranga++Gauranga" },
     });
-    expect(response.results[0].name).toBe("Gauranga");
+    expect((response as any).results[0].name).toBe("Gauranga");
   });
 });

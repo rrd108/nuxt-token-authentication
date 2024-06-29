@@ -49,28 +49,6 @@ export default defineNuxtConfig({
 });
 ```
 
-### 3. Set Prisma schema
-
-The module will install Prisma for you. You can use the following steps to set up Prisma. We assume you have an existing database, with at least one table to store the users, and the table has a column for the token, named `token`.
-
-3.1. `npx prisma init` to create a new Prisma schema file. It will create a new directory called `prisma` with a `schema.prisma` file inside it.
-
-3.2. In your `/.env` file, set the `DATABASE_URL` environment variable to point to your existing database. If your database has no tables yet, read [Getting Started with Prisma](https://pris.ly/d/getting-started).
-
-Supported databases: PostgreSQL, MySQL, SQLite, MongoDB, Microsoft SQL Server, PlanetScale, CockroachDB, Supabase, Neon, Turso
-
-```env
-DATABASE_URL="postgresql://johndoe:randompassword@localhost:5432/mydb?schema=public"
-```
-
-3.3. Set the provider of the datasource block in `schema.prisma` to match your database.
-
-3.4. Run `npx prisma db pull` to turn your database schema into a Prisma schema.
-
-3.5. Run `npx prisma generate` to generate the Prisma Client. You can then start querying your database.
-
-That's it! You can now use Nuxt Token Authentication in your Nuxt app ✨
-
 ## Creating the API endpoints
 
 Let's suppose you want to authenticate the users at the url `api/auth/getToken` with a `POST` request. You can use the following code to create the API endpoint.
@@ -132,6 +110,10 @@ yarn test:watch
 # Release new version
 yarn release
 ```
+
+## Testing
+
+Test data should be at `/.data/db.sqlite3`
 
 <!-- Badges -->
 

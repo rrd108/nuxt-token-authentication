@@ -14,7 +14,7 @@ describe("middleware", async () => {
 
   it("allow access to noAuthRoute", async () => {
     const response = await $fetch("/api/route_noauth", { method: "GET" });
-    expect(response.result).toBe("Gauranga");
+    expect((response as any).result).toBe("Gauranga");
   });
 
   it("deny acces without a token", async () => {
@@ -45,8 +45,8 @@ describe("middleware", async () => {
   it("allow access with valid token", async () => {
     const response = await $fetch("/api/users", {
       method: "GET",
-      headers: { token: "270fsdg04%rt2f6$)b4eblok0dfgauranga" },
+      headers: { token: "Gauranga%TestToken0123456789" },
     });
-    expect(response.results[0].name).toBe("Gauranga");
+    expect((response as any).results[0].name).toBe("Gauranga");
   });
 });
