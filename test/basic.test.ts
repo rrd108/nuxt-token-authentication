@@ -1,10 +1,20 @@
 import { fileURLToPath } from 'node:url'
 import { $fetch, setup } from '@nuxt/test-utils/e2e'
-import { describe, expect, it } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it } from 'vitest'
+import { createTestDatabase, dropTestDatabase } from './utils/testDatabase'
 
 describe('middleware', async () => {
+  let dbName: string
   await setup({
     rootDir: fileURLToPath(new URL('./fixtures/basic', import.meta.url)),
+  })
+
+  beforeEach(async () => {
+    dbName = await createTestDatabase()
+  })
+
+  afterEach(async () => {
+    await dropTestDatabase(dbName)
   })
 
   it('renders the index page without authentication', async () => {
@@ -17,7 +27,7 @@ describe('middleware', async () => {
     expect((response as any).result).toBe('Gauranga')
   })
 
-  it('deny acces without a token', async () => {
+  it('deny access without a token', async () => {
     try {
       await $fetch('/api/users', { method: 'GET' })
       expect(true).toBe(false)

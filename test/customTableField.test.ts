@@ -1,12 +1,20 @@
 import { fileURLToPath } from 'node:url'
 import { $fetch, setup } from '@nuxt/test-utils/e2e'
-import { describe, expect, it } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it } from 'vitest'
+import { createTestDatabase, dropTestDatabase } from './utils/testDatabase'
 
 describe('middleware', async () => {
+  let dbName: string
   await setup({
-    rootDir: fileURLToPath(
-      new URL('./fixtures/customTableField', import.meta.url),
-    ),
+    rootDir: fileURLToPath(new URL('./fixtures/customTableField', import.meta.url)),
+  })
+
+  beforeEach(async () => {
+    dbName = await createTestDatabase('customers', 'identifier') // from this test's nuxt.config.ts
+  })
+
+  afterEach(async () => {
+    await dropTestDatabase(dbName, 'customers')
   })
 
   it('deny access with an invalid token', async () => {
@@ -27,7 +35,7 @@ describe('middleware', async () => {
   it('allow access with valid token', async () => {
     const response = await $fetch('/api/users', {
       method: 'GET',
-      headers: { token: '++Gauranga++Gauranga' },
+      headers: { token: 'Gauranga%TestToken0123456789' },
     })
     expect((response as any).results[0].name).toBe('Gauranga')
   })

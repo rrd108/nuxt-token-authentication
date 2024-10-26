@@ -1,10 +1,20 @@
 import { fileURLToPath } from 'node:url'
 import { $fetch, setup } from '@nuxt/test-utils/e2e'
-import { describe, expect, it } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it } from 'vitest'
+import { createTestDatabase, dropTestDatabase } from './utils/testDatabase'
 
 describe('middleware', async () => {
+  let dbName: string
   await setup({
     rootDir: fileURLToPath(new URL('./fixtures/bearer', import.meta.url)),
+  })
+
+  beforeEach(async () => {
+    dbName = await createTestDatabase()
+  })
+
+  afterEach(async () => {
+    await dropTestDatabase(dbName)
   })
 
   it('deny access with an invalid token', async () => {
