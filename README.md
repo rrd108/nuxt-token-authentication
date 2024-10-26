@@ -7,10 +7,6 @@
 
 This Nuxt module simplifies user authentication using HTTP headers, streamlining the integration of token-based authorization into your application.
 
-- [✨ &nbsp;Release Notes](/CHANGELOG.md)
-  <!-- - [🏀 Online playground](https://stackblitz.com/github/your-org/nuxt-token-authentication?file=playground%2Fapp.vue) -->
-- [📖 &nbsp;Documentation](https://github.com/rrd108/nuxt-token-authentication)
-
 ## Features
 
 - **Flexible Authentication:** Supports various database backends (MySQL, SQLite, MongoDB, Microsoft SQL Server, PlanetScale, CockroachDB, Supabase, Neon, Turso) for user and token management.
@@ -57,21 +53,36 @@ Create a file at `/server/api/auth/getToken.post.ts` with the following code. Fe
 Do not forget to change `data.password` (coming from the user's request) to a **hashed password**.
 
 ```ts
-import { PrismaClient } from "@prisma/client";
-const prisma = new PrismaClient();
+import bcrypt from "bcrypt";
 
 export default defineEventHandler(async (event) => {
+  const db = useDatabase();
   const data = await readBody(event);
 
   const options = useRuntimeConfig().public.nuxtTokenAuthentication;
-  const user = await prisma[options.authTable].findUnique({
-    where: {
-      email: data.email,
-      password: data.password,
-    },
-  });
 
-  delete user?.password;
+  // for table names we need and extra {} - see https://github.com/unjs/db0/issues/77
+  const { rows } = await db.sql`
+    SELECT * FROM {${options.authTable}}
+    WHERE email = ${data.email}
+    LIMIT 1`;
+
+  const isPasswordValid = await bcrypt.compare(
+    data.password,
+    String(rows![0].password)
+  );
+  if (!isPasswordValid) {
+    throw createError({
+      status: 401,
+      message: "Username or password is incorrect!",
+    });
+  }
+
+  const user = rows ? rows[0] : undefined;
+  if (user) {
+    delete user.password;
+    // TODO you can generate a new token here on every login
+  }
   return { user };
 });
 ```
@@ -96,12 +107,6 @@ yarn dev:build
 
 # Run ESLint
 yarn lint
-
-# Set up for testing
-npx prisma db push
-npx prisma db seed
-# and create .env files for the test folders with DATABASE_URL="file:/fullPath/prisma/dev.db"
-
 
 # Run Vitest
 yarn test

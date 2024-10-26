@@ -1,4 +1,4 @@
-import NuxtTokenAuthentication from "../../../src/module";
+import NuxtTokenAuthentication from '../../../src/module'
 
 export default defineNuxtConfig({
   modules: [NuxtTokenAuthentication],
@@ -8,8 +8,8 @@ export default defineNuxtConfig({
     },
   },
   nuxtTokenAuthentication: {
-    authTable: "customers",
-    tokenField: "identifier",
-    noAuthRoutes: ["GET:/api/route_noauth"],
+    authTable: 'customers',
+    tokenField: 'identifier',
+    noAuthRoutes: ['GET:/api/route_noauth'],
   },
-});
+})
