@@ -127,10 +127,6 @@ yarn test:watch
 yarn release
 ```
 
-## Testing
-
-Test data should be at `/.data/db.sqlite3`
-
 <!-- Badges -->
 
 [npm-version-src]: https://img.shields.io/npm/v/nuxt-token-authentication/latest.svg?style=flat&colorA=020420&colorB=00DC82
