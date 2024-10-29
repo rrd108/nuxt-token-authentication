@@ -36,15 +36,25 @@ npm install nuxt-token-authentication
 export default defineNuxtConfig({
   modules: ["nuxt-token-authentication"],
   nuxtTokenAuthentication: {
-    //authTable: "users", // users table name, default: "users"
+    //authTable: "users",   // users table name, default: "users"
     //tokenField: "token",  // name of the field in your table that stores the token, default: "token"
     //tokenHeader: "Token", // name of the authentication header, you can use or "Authorization", or anything else you want, default: "Token"
-    // prefix: "Bearer" // value used to prefix the token's value, default is empty
-    // TODO db0 connector
+    // prefix: "Bearer"     // value used to prefix the token's value, default is empty
+    // connector: {         // connector name and options for storing the users table, see details: https://db0.unjs.io/connectors
+    //  name: 'sqlite',     // supported: mysql, postgresql, sqlite, default: sqlite
+    //  options: {
+    //    path: './data/db.sqlite3',  // path to the sqlite database file, default: './data/db.sqlite3'
+    //   },
+    // },
     noAuthRoutes: ["POST:/api/auth/getToken"], // list of routes that do not require authentication
   },
 });
 ```
+
+### 3. Install a database connector
+
+The complete list of supported database connectors is available at [db0.unjs.io](https://db0.unjs.io/connectors).
+The module supports MySQL, PostgreSQL, and SQLite. If you need another connector open an issue.
 
 ## Creating the API endpoints
 
