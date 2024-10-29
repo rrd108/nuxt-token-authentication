@@ -1,20 +1,18 @@
 import { fileURLToPath } from 'node:url'
 import { $fetch, setup } from '@nuxt/test-utils/e2e'
-import { afterEach, beforeEach, describe, expect, it } from 'vitest'
-import { createTestDatabase, dropTestDatabase } from './utils/testDatabase'
+import defu from 'defu'
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
+import { defaultOptions } from '../src/module'
+import config from './fixtures/customTableField/nuxt.config'
+import { createTestDatabase, dropTestDatabase } from './utils/createTestDatabase'
+
+const options = defu(config.nuxtTokenAuthentication, defaultOptions)
+beforeAll(async () => await createTestDatabase(options))
+afterAll(async () => await dropTestDatabase(options))
 
 describe('middleware', async () => {
-  let dbName: string
   await setup({
     rootDir: fileURLToPath(new URL('./fixtures/customTableField', import.meta.url)),
-  })
-
-  beforeEach(async () => {
-    dbName = await createTestDatabase('customers', 'identifier') // from this test's nuxt.config.ts
-  })
-
-  afterEach(async () => {
-    await dropTestDatabase(dbName, 'customers')
   })
 
   it('deny access with an invalid token', async () => {

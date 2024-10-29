@@ -1,3 +1,4 @@
+import { defineNuxtConfig } from 'nuxt/config'
 import NuxtTokenAuthentication from '../../../src/module'
 
 export default defineNuxtConfig({
@@ -11,5 +12,11 @@ export default defineNuxtConfig({
     noAuthRoutes: ['GET:/api/route_noauth'],
     tokenHeader: 'Authorization',
     prefix: 'Bearer',
+    connector: {
+      name: 'sqlite',
+      options: {
+        path: './test/data/bearer.sqlite3',
+      },
+    },
   },
 })

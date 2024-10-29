@@ -9,11 +9,28 @@ import defu from 'defu'
 // Module options TypeScript interface definition
 export interface ModuleOptions {
   authTable?: string
-  connector?: string
+  connector?: {
+    name: string
+    options: Record<string, any>
+  }
   noAuthRoutes: string[]
   prefix?: string
   tokenField?: string
   tokenHeader?: string
+}
+
+export const defaultOptions: ModuleOptions = {
+  authTable: 'users',
+  connector: {
+    name: 'sqlite',
+    options: {
+      path: './data/db.sqlite3',
+    },
+  },
+  tokenField: 'token',
+  tokenHeader: 'Token',
+  prefix: '',
+  noAuthRoutes: [],
 }
 
 export default defineNuxtModule<ModuleOptions>({
@@ -23,14 +40,7 @@ export default defineNuxtModule<ModuleOptions>({
   },
 
   // Default configuration options of the Nuxt module
-  defaults: {
-    authTable: 'users',
-    connector: 'sqlite:./data/db.sqlite',
-    tokenField: 'token',
-    tokenHeader: 'Token',
-    prefix: '',
-    noAuthRoutes: [],
-  },
+  defaults: defaultOptions,
 
   setup(options, nuxt) {
     const resolver = createResolver(import.meta.url)

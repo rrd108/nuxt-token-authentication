@@ -1,5 +1,9 @@
 import { useRuntimeConfig } from '#imports'
+import { createDatabase } from 'db0'
+import sqlite from 'db0/connectors/better-sqlite3'
 import { createError, defineEventHandler, getHeader } from 'h3'
+
+const useDb = (options: any) => createDatabase(sqlite(options.connector.options))
 
 export default defineEventHandler(async (event) => {
   // check if the requested route starts with api
@@ -28,11 +32,9 @@ export default defineEventHandler(async (event) => {
   const strippedToken = token.replace(`${options.prefix} `, '')
   let user
   try {
-    const db = useDatabase()
-    // for table names we need and extra {} - see https://github.com/unjs/db0/issues/77
-    const { rows }
-      = await db.sql`SELECT * FROM {${options.authTable}} WHERE {${options.tokenField}} = ${strippedToken} LIMIT 1`
-    user = rows[0]
+    const db = useDb(options)
+    const { rows } = await db.sql`SELECT * FROM {${options.authTable}} WHERE {${options.tokenField}} = ${strippedToken} LIMIT 1`
+    user = rows?.[0]
   }
   catch (error) {
     console.error({ error })
