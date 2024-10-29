@@ -30,22 +30,37 @@ yarn add nuxt-token-authentication
 npm install nuxt-token-authentication
 ```
 
-### 2. Add `nuxt-token-authentication` to the `modules` section of `nuxt.config.ts`
+### 2. Add `nuxt-token-authentication` to `modules` and set up your database
 
-```js
+```ts
+const defaultDatabase = {
+  // add your connector and it's options here
+  connector: "sqlite" as const,
+  options: {
+    path: "./data/krisnavolgy.sqlite3",
+  },
+};
+
 export default defineNuxtConfig({
   modules: ["nuxt-token-authentication"],
+  nitro: {
+    // should be switched on
+    experimental: {
+      database: true,
+    },
+    database: {
+      default: defaultDatabase,
+    },
+  },
   nuxtTokenAuthentication: {
     //authTable: "users",   // users table name, default: "users"
     //tokenField: "token",  // name of the field in your table that stores the token, default: "token"
     //tokenHeader: "Token", // name of the authentication header, you can use or "Authorization", or anything else you want, default: "Token"
     // prefix: "Bearer"     // value used to prefix the token's value, default is empty
-    // connector: {         // connector name and options for storing the users table, see details: https://db0.unjs.io/connectors
-    //  name: 'sqlite',     // supported: postgresql, sqlite, default: sqlite, mysql in progess
-    //  options: {
-    //    path: './data/db.sqlite3',  // path to the sqlite database file, default: './data/db.sqlite3'
-    //   },
-    // },
+    connector: {
+      name: defaultDatabase.connector,
+      options: defaultDatabase.options,
+    },
     noAuthRoutes: ["POST:/api/auth/getToken"], // list of routes that do not require authentication
   },
 });
