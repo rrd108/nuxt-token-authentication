@@ -41,7 +41,7 @@ export default defineNuxtConfig({
     //tokenHeader: "Token", // name of the authentication header, you can use or "Authorization", or anything else you want, default: "Token"
     // prefix: "Bearer"     // value used to prefix the token's value, default is empty
     // connector: {         // connector name and options for storing the users table, see details: https://db0.unjs.io/connectors
-    //  name: 'sqlite',     // supported: mysql, postgresql, sqlite, default: sqlite
+    //  name: 'sqlite',     // supported: postgresql, sqlite, default: sqlite, mysql in progess
     //  options: {
     //    path: './data/db.sqlite3',  // path to the sqlite database file, default: './data/db.sqlite3'
     //   },
@@ -54,7 +54,7 @@ export default defineNuxtConfig({
 ### 3. Install a database connector
 
 The complete list of supported database connectors is available at [db0.unjs.io](https://db0.unjs.io/connectors).
-The module supports MySQL, PostgreSQL, and SQLite. If you need another connector open an issue.
+The module supports PostgreSQL, and SQLite. If you need another connector open an issue.
 
 ## Creating the API endpoints
 
