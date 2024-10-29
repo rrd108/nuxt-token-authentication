@@ -1,7 +1,7 @@
 {
   "name": "nuxt-token-authentication",
   "type": "module",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Token Authentication for Nuxt Server APIs",
   "license": "MIT",
   "repository": "rrd108/nuxt-token-authentication",

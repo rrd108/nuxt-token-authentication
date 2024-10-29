@@ -2,6 +2,10 @@
 
 ## v1.0.1
 
+[compare changes](https://github.com/rrd108/nuxt-token-authentication/compare/v1.0.1...v1.0.1)
+
+## v1.0.1
+
 [compare changes](https://github.com/rrd108/nuxt-token-authentication/compare/v0.1.1...v1.0.1)
 
 ### 🏡 Chore
