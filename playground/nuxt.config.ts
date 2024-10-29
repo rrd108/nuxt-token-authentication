@@ -1,7 +1,12 @@
 export default defineNuxtConfig({
-  modules: ["../src/module"],
+  modules: ['../src/module'],
+  nitro: {
+    experimental: {
+      database: true,
+    },
+  },
   nuxtTokenAuthentication: {
-    noAuthRoutes: ["POST:/api/auth/getToken"],
+    noAuthRoutes: ['POST:/api/auth/getToken'],
   },
   devtools: { enabled: true },
-});
+})

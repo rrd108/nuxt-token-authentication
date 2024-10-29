@@ -1,49 +1,66 @@
-//import { usePrismaClient } from "../../composables/usePrismaClient.server";
-import { PrismaClient } from "@prisma/client";
-import { createError, defineEventHandler, getHeader } from "h3";
-import { useRuntimeConfig } from "#imports";
+import { useRuntimeConfig } from '#imports'
+import { createDatabase } from 'db0'
+import { createError, defineEventHandler, getHeader } from 'h3'
+import type { ModuleOptions } from '~/src/module'
+
+const getConnector = async (name: string) => {
+  switch (name) {
+    case 'mysql':
+      return (await import('db0/connectors/mysql2')).default
+    case 'postgresql':
+      return (await import('db0/connectors/postgresql')).default
+    case 'sqlite':
+      return (await import('db0/connectors/better-sqlite3')).default
+    default:
+      throw new Error(`Unsupported database connector: ${name}`)
+  }
+}
+
+const useDb = async (options: ModuleOptions) => {
+  const connectorName = options.connector!.name
+  const connector = await getConnector(connectorName)
+  return createDatabase(connector(options.connector!.options))
+}
 
 export default defineEventHandler(async (event) => {
   // check if the requested route starts with api
-  if (!event.node.req.url?.startsWith("/api/")) {
-    return;
+  if (!event.node.req.url?.startsWith('/api/')) {
+    return
   }
 
-  const options = useRuntimeConfig().public.nuxtTokenAuthentication;
+  const options = useRuntimeConfig().public.nuxtTokenAuthentication
 
   if (
     options.noAuthRoutes.includes(
-      `${event.node.req.method}:${event.node.req.url}`
+      `${event.node.req.method}:${event.node.req.url}`,
     )
   ) {
-    return;
+    return
   }
 
-  const token = getHeader(event, options.tokenHeader);
+  const token = getHeader(event, options.tokenHeader)
   if (!token) {
     throw createError({
       statusCode: 401,
-      statusMessage: "Missing Authentication header",
-    });
+      statusMessage: 'Missing Authentication header',
+    })
   }
 
-  const strippedToken = token
-    .toLowerCase()
-    .replace(`${options.prefix?.toLowerCase()} `, "");
-  let user;
+  const strippedToken = token.replace(`${options.prefix} `, '')
+  let user
   try {
-    const prisma = new PrismaClient();
-    user = await prisma[options.authTable].findFirst({
-      where: { [options.tokenField]: strippedToken },
-    });
-  } catch (error) {
-    console.error({ error });
+    const db = await useDb(options)
+    const { rows } = await db.sql`SELECT * FROM {${options.authTable}} WHERE {${options.tokenField}} = ${strippedToken} LIMIT 1`
+    user = rows?.[0]
+  }
+  catch (error) {
+    console.error({ error })
   }
 
   if (!user) {
     throw createError({
       statusCode: 401,
-      statusMessage: "Authentication error",
-    });
+      statusMessage: 'Authentication error',
+    })
   }
-});
+})

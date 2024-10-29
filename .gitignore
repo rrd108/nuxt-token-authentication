@@ -19,7 +19,7 @@ dist
 # Nuxt
 .nuxt
 .output
-.data
+# .data
 .vercel_build_output
 .build-*
 .netlify
@@ -32,6 +32,7 @@ reports
 coverage
 *.lcov
 .nyc_output
+test/data
 
 # VSCode
 .vscode/*
@@ -54,5 +55,3 @@ coverage
 Network Trash Folder
 Temporary Items
 .apdisk
-
-prisma/schema.prisma

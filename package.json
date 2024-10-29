@@ -1,10 +1,10 @@
 {
   "name": "nuxt-token-authentication",
-  "version": "0.1.1",
-  "description": "Token Authentication for Nuxt Server APIs",
-  "repository": "rrd108/nuxt-token-authentication",
-  "license": "MIT",
   "type": "module",
+  "version": "1.0.0",
+  "description": "Token Authentication for Nuxt Server APIs",
+  "license": "MIT",
+  "repository": "rrd108/nuxt-token-authentication",
   "keywords": [
     "nuxt",
     "nuxt-module",
@@ -30,29 +30,31 @@
     "release": "yarn lint && yarn test && yarn prepack && changelogen --release && yarn publish && git push --follow-tags",
     "lint": "eslint .",
     "test": "vitest run",
-    "test:watch": "vitest watch"
+    "test:watch": "vitest watch",
+    "test:types": "vue-tsc --noEmit && cd playground && vue-tsc --noEmit"
   },
   "dependencies": {
-    "@nuxt/kit": "^3.10.3",
-    "@prisma/client": "5.10.2",
+    "@antfu/eslint-config": "^3.8.0",
+    "@nuxt/kit": "^3.12.2",
+    "bcrypt": "^5.1.1",
     "defu": "^6.1.4"
   },
   "devDependencies": {
-    "@nuxt/devtools": "latest",
-    "@nuxt/eslint-config": "^0.2.0",
-    "@nuxt/module-builder": "^0.5.5",
-    "@nuxt/schema": "^3.10.3",
+    "@nuxt/devtools": "^1.3.7",
+    "@nuxt/eslint-config": "^0.3.13",
+    "@nuxt/module-builder": "^0.8.3",
+    "@nuxt/schema": "^3.12.2",
     "@nuxt/test-utils": "^3.11.0",
-    "@types/node": "^20.11.25",
+    "@types/bcrypt": "^5.0.2",
+    "@types/node": "^20.14.9",
+    "better-sqlite3": "^11.1.1",
     "changelogen": "^0.5.5",
-    "eslint": "^8.57.0",
-    "nuxt": "^3.10.3",
-    "prisma": "^5.10.2",
+    "eslint": "^9.6.0",
+    "nuxt": "^3.12.2",
     "tsx": "^4.7.1",
-    "vitest": "^1.3.1",
-    "vitest-mock-extended": "^1.3.1"
-  },
-  "prisma": {
-    "seed": "tsx prisma/seed.ts"
+    "typescript": "^5.6.3",
+    "vitest": "^1.6.0",
+    "vitest-mock-extended": "^1.3.1",
+    "vue-tsc": "^2.0.24"
   }
 }

@@ -7,10 +7,6 @@
 
 This Nuxt module simplifies user authentication using HTTP headers, streamlining the integration of token-based authorization into your application.
 
-- [✨ &nbsp;Release Notes](/CHANGELOG.md)
-  <!-- - [🏀 Online playground](https://stackblitz.com/github/your-org/nuxt-token-authentication?file=playground%2Fapp.vue) -->
-- [📖 &nbsp;Documentation](https://github.com/rrd108/nuxt-token-authentication)
-
 ## Features
 
 - **Flexible Authentication:** Supports various database backends (MySQL, SQLite, MongoDB, Microsoft SQL Server, PlanetScale, CockroachDB, Supabase, Neon, Turso) for user and token management.
@@ -40,36 +36,25 @@ npm install nuxt-token-authentication
 export default defineNuxtConfig({
   modules: ["nuxt-token-authentication"],
   nuxtTokenAuthentication: {
-    //authTable: "users", // users table name, default: "users"
+    //authTable: "users",   // users table name, default: "users"
     //tokenField: "token",  // name of the field in your table that stores the token, default: "token"
     //tokenHeader: "Token", // name of the authentication header, you can use or "Authorization", or anything else you want, default: "Token"
-    // prefix: "Bearer" // value used to prefix the token's value, default is empty
+    // prefix: "Bearer"     // value used to prefix the token's value, default is empty
+    // connector: {         // connector name and options for storing the users table, see details: https://db0.unjs.io/connectors
+    //  name: 'sqlite',     // supported: mysql, postgresql, sqlite, default: sqlite
+    //  options: {
+    //    path: './data/db.sqlite3',  // path to the sqlite database file, default: './data/db.sqlite3'
+    //   },
+    // },
     noAuthRoutes: ["POST:/api/auth/getToken"], // list of routes that do not require authentication
   },
 });
 ```
 
-### 3. Set Prisma schema
+### 3. Install a database connector
 
-The module will install Prisma for you. You can use the following steps to set up Prisma. We assume you have an existing database, with at least one table to store the users, and the table has a column for the token, named `token`.
-
-3.1. `npx prisma init` to create a new Prisma schema file. It will create a new directory called `prisma` with a `schema.prisma` file inside it.
-
-3.2. In your `/.env` file, set the `DATABASE_URL` environment variable to point to your existing database. If your database has no tables yet, read [Getting Started with Prisma](https://pris.ly/d/getting-started).
-
-Supported databases: PostgreSQL, MySQL, SQLite, MongoDB, Microsoft SQL Server, PlanetScale, CockroachDB, Supabase, Neon, Turso
-
-```env
-DATABASE_URL="postgresql://johndoe:randompassword@localhost:5432/mydb?schema=public"
-```
-
-3.3. Set the provider of the datasource block in `schema.prisma` to match your database.
-
-3.4. Run `npx prisma db pull` to turn your database schema into a Prisma schema.
-
-3.5. Run `npx prisma generate` to generate the Prisma Client. You can then start querying your database.
-
-That's it! You can now use Nuxt Token Authentication in your Nuxt app ✨
+The complete list of supported database connectors is available at [db0.unjs.io](https://db0.unjs.io/connectors).
+The module supports MySQL, PostgreSQL, and SQLite. If you need another connector open an issue.
 
 ## Creating the API endpoints
 
@@ -79,21 +64,36 @@ Create a file at `/server/api/auth/getToken.post.ts` with the following code. Fe
 Do not forget to change `data.password` (coming from the user's request) to a **hashed password**.
 
 ```ts
-import { PrismaClient } from "@prisma/client";
-const prisma = new PrismaClient();
+import bcrypt from "bcrypt";
 
 export default defineEventHandler(async (event) => {
+  const db = useDatabase();
   const data = await readBody(event);
 
   const options = useRuntimeConfig().public.nuxtTokenAuthentication;
-  const user = await prisma[options.authTable].findUnique({
-    where: {
-      email: data.email,
-      password: data.password,
-    },
-  });
 
-  delete user?.password;
+  // for table names we need and extra {} - see https://github.com/unjs/db0/issues/77
+  const { rows } = await db.sql`
+    SELECT * FROM {${options.authTable}}
+    WHERE email = ${data.email}
+    LIMIT 1`;
+
+  const isPasswordValid = await bcrypt.compare(
+    data.password,
+    String(rows![0].password)
+  );
+  if (!isPasswordValid) {
+    throw createError({
+      status: 401,
+      message: "Username or password is incorrect!",
+    });
+  }
+
+  const user = rows ? rows[0] : undefined;
+  if (user) {
+    delete user.password;
+    // TODO you can generate a new token here on every login
+  }
   return { user };
 });
 ```
@@ -119,12 +119,6 @@ yarn dev:build
 # Run ESLint
 yarn lint
 
-# Set up for testing
-npx prisma db push
-npx prisma db seed
-# and create .env files for the test folders with DATABASE_URL="file:/fullPath/prisma/dev.db"
-
-
 # Run Vitest
 yarn test
 yarn test:watch
@@ -132,6 +126,10 @@ yarn test:watch
 # Release new version
 yarn release
 ```
+
+## Testing
+
+Test data should be at `/.data/db.sqlite3`
 
 <!-- Badges -->
 
