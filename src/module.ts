@@ -10,7 +10,7 @@ import defu from 'defu'
 export interface ModuleOptions {
   authTable?: string
   connector?: {
-    name: 'sqlite' | 'postgresql'
+    name: 'mysql' | 'postgresql' | 'sqlite'
     options: Record<string, any>
   }
   noAuthRoutes: string[]

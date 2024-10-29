@@ -5,10 +5,12 @@ import type { ModuleOptions } from '~/src/module'
 
 const getConnector = async (name: string) => {
   switch (name) {
-    case 'sqlite':
-      return (await import('db0/connectors/better-sqlite3')).default
+    case 'mysql':
+      return (await import('db0/connectors/mysql2')).default
     case 'postgresql':
       return (await import('db0/connectors/postgresql')).default
+    case 'sqlite':
+      return (await import('db0/connectors/better-sqlite3')).default
     default:
       throw new Error(`Unsupported database connector: ${name}`)
   }
