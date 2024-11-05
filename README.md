@@ -53,10 +53,10 @@ export default defineNuxtConfig({
     },
   },
   nuxtTokenAuthentication: {
-    //authTable: "users",   // users table name, default: "users"
-    //tokenField: "token",  // name of the field in your table that stores the token, default: "token"
-    //tokenHeader: "Token", // name of the authentication header, you can use or "Authorization", or anything else you want, default: "Token"
-    // prefix: "Bearer"     // value used to prefix the token's value, default is empty
+    //authTable: 'users',   // users table name, default: 'users'
+    //tokenField: 'token',  // name of the field in your table that stores the token, default: 'token'
+    //tokenHeader: 'Token', // name of the authentication header, you can use or 'Authorization', or anything else you want, default: 'Token'
+    // prefix: 'Bearer'     // value used to prefix the token's value, default is empty
     connector: {
       name: defaultDatabase.connector,
       options: defaultDatabase.options,
@@ -113,8 +113,24 @@ export default defineEventHandler(async (event) => {
 });
 ```
 
-Now you can send a `POST` request to `/api/auth/getToken` with 2 fields in the body: `email` and `password`. If the user exists, the server will return the user's data, including the token.
+Now you can send a `POST` request to `/api/auth/getToken` with 2 fields in the body: `email` and `password`. If the user exists, the server will return the user's data, including the token, so you can store it in your local state or pinia store.
 Any other routes (except the ones you set in `noAuthRoutes`) will require the token to be sent in the header.
+
+> Do not forget to save the token in the local state or pinia store.
+
+## Implementing Route Access Control
+
+You can limit access to routes by adding a middleware. For example, the following code will redirect to `/admin/login` if the user is not logged in and the route starts with `/admin`.
+
+```ts
+export default defineNuxtRouteMiddleware((to, from) => {
+  const user = useState("user");
+  if (!user.value?.token && to.path.startsWith("/admin")) {
+    console.log("redirecting to login as user is not logged in");
+    return navigateTo("/admin/login");
+  }
+});
+```
 
 ## Development
 
