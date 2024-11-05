@@ -5,11 +5,8 @@ import type { ModuleOptions } from '~/src/module'
 
 const getConnector = async (name: string) => {
   switch (name) {
-    /*
-    waiting for db0 v 0.2 included in nitro
     case 'mysql':
       return (await import('db0/connectors/mysql2')).default
-    */
     case 'postgresql':
       return (await import('db0/connectors/postgresql')).default
     case 'sqlite':
