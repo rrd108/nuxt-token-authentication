@@ -9,7 +9,7 @@ export default defineNuxtConfig({
     },
   },
   nuxtTokenAuthentication: {
-    noAuthRoutes: ['GET:/api/route_noauth'],
+    noAuthRoutes: ['GET:/api/route_noauth', 'GET:/api/orders/[id]'],
     connector: {
       name: 'sqlite',
       options: {

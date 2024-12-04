@@ -57,12 +57,16 @@ describe('middleware', async () => {
       method: 'GET',
       headers: { token: 'Gauranga%TestToken0123456789' },
     })
-
     expect((response as any).results[0].name).toBe('Gauranga')
   })
 
-  it.only('should ignore query params', async () => {
+  it('should ignore query params', async () => {
     const response = await $fetch('/api/route_noauth?q=test', { method: 'GET' })
+    expect((response as any).result).toBe('Gauranga')
+  })
+
+  it('should ignore route params', async () => {
+    const response = await $fetch('/api/orders/12', { method: 'GET' })
     expect((response as any).result).toBe('Gauranga')
   })
 })
