@@ -37,7 +37,7 @@ const defaultDatabase = {
   // add your connector and it's options here
   connector: "sqlite" as const,
   options: {
-    path: "./data/krisnavolgy.sqlite3",
+    path: "./data/users.sqlite3",
   },
 };
 
