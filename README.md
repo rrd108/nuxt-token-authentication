@@ -61,7 +61,7 @@ export default defineNuxtConfig({
       name: defaultDatabase.connector,
       options: defaultDatabase.options,
     },
-    noAuthRoutes: ["POST:/api/auth/getToken"], // list of routes that do not require authentication
+    noAuthRoutes: ["POST:/api/auth/getToken", "GET:/api/orders/[id]"], // list of routes that do not require authentication, query params ignored automatically
   },
 });
 ```
