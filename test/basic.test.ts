@@ -60,4 +60,9 @@ describe('middleware', async () => {
 
     expect((response as any).results[0].name).toBe('Gauranga')
   })
+
+  it.only('should ignore query params', async () => {
+    const response = await $fetch('/api/route_noauth?q=test', { method: 'GET' })
+    expect((response as any).result).toBe('Gauranga')
+  })
 })
