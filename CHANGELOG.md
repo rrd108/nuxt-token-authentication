@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.2.1
+
+[compare changes](https://github.com/rrd108/nuxt-token-authentication/compare/v1.2.0...v1.2.1)
+
 ## v1.1.1
 
 [compare changes](https://github.com/rrd108/nuxt-token-authentication/compare/v1.1.0...v1.1.1)
