@@ -1,6 +1,6 @@
 import { useRuntimeConfig } from '#imports'
 import { createDatabase } from 'db0'
-import { createError, defineEventHandler, getHeader } from 'h3'
+import { createError, defineEventHandler, getHeader, getQuery, getRequestURL, getRouterParams } from 'h3'
 import type { ModuleOptions } from '~/src/module'
 
 const getConnector = async (name: string) => {
@@ -23,18 +23,32 @@ const useDb = async (options: ModuleOptions) => {
 }
 
 export default defineEventHandler(async (event) => {
-  // check if the requested route starts with api
-  if (!event.node.req.url?.startsWith('/api/')) {
+  const path = event.path.split('?')[0]
+
+  if (!path.startsWith('/api/')) {
     return
   }
 
   const options = useRuntimeConfig().public.nuxtTokenAuthentication
 
-  if (
-    options.noAuthRoutes.includes(
-      `${event.node.req.method}:${event.node.req.url}`,
-    )
-  ) {
+  const matchesNoAuthWithRouteParams = options.noAuthRoutes.some((noAuthRoute) => {
+    const [method, routePattern] = noAuthRoute.split(':')
+    if (method !== event.method)
+      return false
+
+    // Convert route pattern to regex
+    const regexPattern = routePattern
+      .replace(/\[([^\]]+)\]/g, '([^/]+)') // Convert [id] to regex capture group
+      .replace(/\//g, '\\/') // Escape forward slashes
+
+    const regex = new RegExp(`^${regexPattern}$`)
+    return regex.test(path)
+  })
+  if (matchesNoAuthWithRouteParams) {
+    return
+  }
+
+  if (options.noAuthRoutes.includes(`${event.method}:${path}`)) {
     return
   }
 
