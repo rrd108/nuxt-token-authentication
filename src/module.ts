@@ -17,6 +17,18 @@ export interface ModuleOptions {
   prefix?: string
   tokenField?: string
   tokenHeader?: string
+  // New Sanctum-like options
+  tokenTable?: string
+  tokenExpiration?: number // in seconds
+  refreshTokenExpiration?: number
+  tokenAbilities?: string[]
+  rateLimiting?: {
+    enabled: boolean
+    maxAttempts: number
+    decayMinutes: number
+  }
+  csrfProtection?: boolean
+  sessionGuard?: 'token' | 'session' | 'both'
 }
 
 export const defaultOptions: ModuleOptions = {
@@ -31,6 +43,18 @@ export const defaultOptions: ModuleOptions = {
   tokenHeader: 'Token',
   prefix: '',
   noAuthRoutes: [],
+  // New Sanctum-like defaults
+  tokenTable: 'personal_access_tokens',
+  tokenExpiration: 60 * 60 * 24 * 365, // 1 year
+  refreshTokenExpiration: 60 * 60 * 24 * 30, // 30 days
+  tokenAbilities: ['*'],
+  rateLimiting: {
+    enabled: true,
+    maxAttempts: 5,
+    decayMinutes: 1,
+  },
+  csrfProtection: false,
+  sessionGuard: 'token',
 }
 
 export default defineNuxtModule<ModuleOptions>({

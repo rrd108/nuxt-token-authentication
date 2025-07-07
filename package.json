@@ -19,6 +19,9 @@
   },
   "main": "./dist/module.cjs",
   "types": "./dist/types.d.ts",
+  "bin": {
+    "nuxt-token-authentication": "./dist/cli/migrate.js"
+  },
   "files": [
     "dist"
   ],
