@@ -21,7 +21,7 @@ export class UserRepository {
       VALUES (${userData.name}, ${userData.email}, ${userData.password}, ${userData.email_verified_at}, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
     `
 
-        const id = result.lastInsertId
+        const id = result.lastInsertRowid
         return await this.findById(id) as User
     }
 
@@ -104,7 +104,7 @@ export class PersonalAccessTokenRepository {
       )
     `
 
-        const id = result.lastInsertId
+        const id = result.lastInsertRowid
         return await this.findById(id) as PersonalAccessToken
     }
 
@@ -170,7 +170,7 @@ export class PasswordResetTokenRepository {
       VALUES (${tokenData.email}, ${tokenData.token}, CURRENT_TIMESTAMP)
     `
 
-        const id = result.lastInsertId
+        const id = result.lastInsertRowid
         const result2 = await this.db.sql`SELECT * FROM ${TABLES.PASSWORD_RESET_TOKENS} WHERE id = ${id} LIMIT 1`
         return result2.rows?.[0] as PasswordResetToken
     }

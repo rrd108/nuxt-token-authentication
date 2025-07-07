@@ -1,3 +1,17 @@
 {
-  "extends": "./.nuxt/tsconfig.json"
+    "compilerOptions": {
+        "target": "ES2020",
+        "jsx": "preserve",
+        "module": "ESNext",
+        "moduleResolution": "bundler",
+        "strict": true,
+        "declaration": true,
+        "outDir": "./dist",
+        "allowSyntheticDefaultImports": true,
+        "esModuleInterop": true,
+        "forceConsistentCasingInFileNames": true,
+        "skipLibCheck": true
+    },
+    "include": ["src/**/*", "test/**/*"],
+    "exclude": ["node_modules", "dist", ".nuxt"]
 }

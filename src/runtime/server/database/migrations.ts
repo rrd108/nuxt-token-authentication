@@ -70,46 +70,44 @@ const updateUsersTable: Migration = {
     name: 'update_users_table',
     up: async (db: Database, options: ModuleOptions) => {
         // Check if users table exists and has the required columns
-        const tableExists = await db.sql`SELECT name FROM sqlite_master WHERE type='table' AND name=${options.authTable}`
+        const tableExists = await db.sql`SELECT name FROM sqlite_master WHERE type='table' AND name={${options.authTable}}`
 
-        if (tableExists.rows.length === 0) {
+        if (tableExists.rows?.length === 0) {
             // Create users table if it doesn't exist
-            await db.sql`
-        CREATE TABLE ${options.authTable} (
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
-          name TEXT NOT NULL,
-          email TEXT UNIQUE NOT NULL,
-          password TEXT NOT NULL,
-          email_verified_at TIMESTAMP,
-          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-          updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        )
-      `
+            await db.sql`CREATE TABLE {${options.authTable}} (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                name TEXT NOT NULL,
+                email TEXT UNIQUE NOT NULL,
+                password TEXT NOT NULL,
+                email_verified_at TIMESTAMP,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )`
         }
         else {
             // Add missing columns to existing table
-            const columns = await db.sql`PRAGMA table_info(${options.authTable})`
-            const columnNames = columns.rows.map((col: any) => col.name)
+            const columns = await db.sql`PRAGMA table_info({${options.authTable}})`
+            const columnNames = columns.rows?.map((col: any) => col.name) || []
 
             if (!columnNames.includes('created_at')) {
-                await db.sql`ALTER TABLE ${options.authTable} ADD COLUMN created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP`
+                await db.sql`ALTER TABLE {${options.authTable}} ADD COLUMN created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP`
             }
 
             if (!columnNames.includes('updated_at')) {
-                await db.sql`ALTER TABLE ${options.authTable} ADD COLUMN updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP`
+                await db.sql`ALTER TABLE {${options.authTable}} ADD COLUMN updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP`
             }
 
             if (!columnNames.includes('email_verified_at')) {
-                await db.sql`ALTER TABLE ${options.authTable} ADD COLUMN email_verified_at TIMESTAMP`
+                await db.sql`ALTER TABLE {${options.authTable}} ADD COLUMN email_verified_at TIMESTAMP`
             }
 
             if (!columnNames.includes('password')) {
-                await db.sql`ALTER TABLE ${options.authTable} ADD COLUMN password TEXT`
+                await db.sql`ALTER TABLE {${options.authTable}} ADD COLUMN password TEXT`
             }
         }
 
         // Create indexes
-        await db.sql`CREATE INDEX IF NOT EXISTS idx_users_email ON ${options.authTable}(email)`
+        await db.sql`CREATE INDEX IF NOT EXISTS idx_users_email ON {${options.authTable}}(email)`
     },
     down: async (db: Database, options: ModuleOptions) => {
         // This migration doesn't have a proper down migration as it modifies existing table
