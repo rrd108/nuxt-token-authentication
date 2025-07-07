@@ -48,7 +48,7 @@
     "@types/bcrypt": "^5.0.2",
     "@types/node": "^22.0.0",
     "better-sqlite3": "^11.1.1",
-    "changelogen": "^0.5.5",
+    "changelogen": "^0.6.0",
     "eslint": "^9.6.0",
     "nuxt": "^3.14.0",
     "tsx": "^4.7.1",
