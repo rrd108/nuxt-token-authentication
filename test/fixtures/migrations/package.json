@@ -1,13 +1,13 @@
 {
-    "name": "nuxt-token-authentication-migrations-fixture",
-    "type": "module",
-    "private": true,
-    "scripts": {
-        "dev": "nuxi dev",
-        "build": "nuxi build",
-        "generate": "nuxi generate"
-    },
-    "dependencies": {
-        "nuxt": "latest"
-    }
+  "name": "nuxt-token-authentication-migrations-fixture",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "nuxi dev",
+    "build": "nuxi build",
+    "generate": "nuxi generate"
+  },
+  "dependencies": {
+    "nuxt": "latest"
+  }
 }

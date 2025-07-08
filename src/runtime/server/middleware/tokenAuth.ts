@@ -1,7 +1,7 @@
+import type { ModuleOptions } from '~/src/module'
 import { useRuntimeConfig } from '#imports'
 import { createDatabase } from 'db0'
 import { createError, defineEventHandler, getHeader } from 'h3'
-import type { ModuleOptions } from '~/src/module'
 
 const getConnector = async (name: string) => {
   switch (name) {
