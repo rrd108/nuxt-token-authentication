@@ -39,7 +39,7 @@
   "dependencies": {
     "@antfu/eslint-config": "^3.8.0",
     "@nuxt/kit": "^3.14.0",
-    "bcrypt": "^5.1.1",
+    "bcrypt": "^6.0.0",
     "defu": "^6.1.4"
   },
   "devDependencies": {
