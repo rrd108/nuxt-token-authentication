@@ -1,19 +1,25 @@
-# Nuxt Token Authentication
+# Nuxt Token Authentication (Enhanced with Sanctum-like Features)
 
 [![npm version][npm-version-src]][npm-version-href]
 [![npm downloads][npm-downloads-src]][npm-downloads-href]
 [![License][license-src]][license-href]
 [![Nuxt][nuxt-src]][nuxt-href]
 
-This Nuxt module simplifies user authentication using HTTP headers, streamlining the integration of token-based authorization into your application.
+This Nuxt module provides robust token-based authentication, inspired by Laravel Sanctum, for your Nuxt 3 applications. It simplifies user authentication using database-backed tokens and offers optional, customizable UI components for login.
 
 ## Features
 
-- **Flexible Authentication:** Supports various database backends (MySQL, SQLite, MongoDB, Microsoft SQL Server, PlanetScale, CockroachDB, Supabase, Neon, Turso) for user and token management.
-- **Customizable Token Handling:** You can configure the token header and the routes that do not require authentication.
+- **Sanctum-like Token System:** Uses `personal_access_tokens` table for persistent API tokens.
+- **Flexible Database Support:** Leverages `db0` for compatibility with various database backends (MySQL, PostgreSQL, SQLite, etc.).
+- **Built-in Login API:** Provides a default `/api/auth/login` endpoint.
+- **Optional Frontend UI:** Includes a default, Tailwind CSS styled login page (`/auth/login`) and form component (`<AuthLoginForm />`) using FormKit.
+- **Customizable & Overridable:**
+    - Configure token names, expiration, and tables.
+    - Easily disable or override default UI components and API routes.
+    - Define routes exempt from authentication.
+- **Secure by Default:** Password hashing with bcrypt for login endpoint, server-side token validation.
 - **Streamlined Integration:** Easy setup with minimal configuration.
-- **Seamless error handling** for authentication failures.
-- **Production-Ready:** Secure practices for handling sensitive token data.
+- **Automatic Token Handling:** Client-side plugin to attach tokens to API requests and server-side middleware to protect routes.
 
 ## Quick Setup
 
@@ -21,115 +27,165 @@ This Nuxt module simplifies user authentication using HTTP headers, streamlining
 
 ```bash
 # Using pnpm
-pnpm add nuxt-token-authentication
-
+pnpm add nuxt-token-authentication @formkit/nuxt @nuxtjs/tailwindcss bcrypt
 # Using yarn
-yarn add nuxt-token-authentication
-
+yarn add nuxt-token-authentication @formkit/nuxt @nuxtjs/tailwindcss bcrypt
 # Using npm
-npm install nuxt-token-authentication
+npm install nuxt-token-authentication @formkit/nuxt @nuxtjs/tailwindcss bcrypt
 ```
+*(FormKit, TailwindCSS and bcrypt are peer dependencies if using the default UI and login endpoint).*
 
-### 2. Add `nuxt-token-authentication` to `modules` and set up your database
+### 2. Add modules to `nuxt.config.ts` and configure
 
 ```ts
-const defaultDatabase = {
-  // add your connector and it's options here
-  connector: "sqlite" as const,
-  options: {
-    path: "./data/users.sqlite3",
-  },
-};
-
+// nuxt.config.ts
 export default defineNuxtConfig({
-  modules: ["nuxt-token-authentication"],
+  modules: [
+    'nuxt-token-authentication',
+    '@formkit/nuxt', // Required if using default login form
+    '@nuxtjs/tailwindcss', // Required if using default login form styling
+  ],
+
   nitro: {
-    // should be switched on
+    // Ensure experimental database feature is enabled for db0
     experimental: {
       database: true,
     },
+    // Define your database connection (used by the module)
     database: {
-      default: defaultDatabase,
+      default: {
+        connector: 'sqlite', // Example: 'mysql', 'postgresql'
+        options: {
+          path: './data/db.sqlite3', // Example for SQLite
+          // Add other connector options as needed (host, port, user, password, database)
+        },
+      },
     },
   },
+
   nuxtTokenAuthentication: {
-    //authTable: 'users',   // users table name, default: 'users'
-    //tokenField: 'token',  // name of the field in your table that stores the token, default: 'token'
-    //tokenHeader: 'Token', // name of the authentication header, you can use or 'Authorization', or anything else you want, default: 'Token'
-    // prefix: 'Bearer'     // value used to prefix the token's value, default is empty
-    connector: {
-      name: defaultDatabase.connector,
-      options: defaultDatabase.options,
+    // Core settings (already have sensible defaults)
+    // authTable: 'users',                // User table name
+    // tokenTable: 'personal_access_tokens', // Table for storing tokens
+    // tokenExpiration: 31536000,         // Token expiration in seconds (default: 1 year)
+
+    // HTTP Header for token (defaults to 'Authorization' with 'Bearer' prefix)
+    // tokenHeader: 'Authorization',      // Header name
+    // prefix: 'Bearer',                  // Token prefix (set to empty string if not using a prefix)
+
+    // Customize which routes are public (module adds its own login API & page by default)
+    // noAuthRoutes: ['/api/public-route', '/api/auth/register'],
+
+    // UI Customization
+    customUI: {
+      // login: true, // Set to true to disable the default /auth/login page and AuthLoginForm component
     },
-    noAuthRoutes: ["POST:/api/auth/getToken", "GET:/api/orders/[id]"], // list of routes that do not require authentication, query params ignored automatically
+
+    // Database connector options (if not using nitro.database.default)
+    // connector: {
+    //   name: 'sqlite',
+    //   options: { path: './data/mydb.sqlite3' }
+    // }
   },
+
+  // Optional: FormKit configuration (if using default UI)
+  // formkit: {
+  //   autoImport: true,
+  // },
 });
 ```
 
-### 3. Install a database connector
+**Important:** Ensure you have the appropriate database driver installed (e.g., `better-sqlite3`, `mysql2`, `pg`). Refer to [db0.unjs.io](https://db0.unjs.io/connectors) for more details. The module will run migrations to create necessary tables (`users`, `personal_access_tokens`, `migrations`) if they don't exist.
 
-The complete list of supported database connectors is available at [db0.unjs.io](https://db0.unjs.io/connectors).
-The module supports PostgreSQL, and SQLite. If you need another connector open an issue.
+## Login Functionality
 
-## Creating the API endpoints
+### Backend API (`/api/auth/login`)
+The module provides a default `POST /api/auth/login` endpoint. It expects an `email` and `password` in the request body.
+- On success, it returns `{ token, user, expires_at }`.
+- It uses `bcrypt` to compare passwords. Ensure your user registration process hashes passwords with `bcrypt`.
+- This endpoint is automatically added to `noAuthRoutes`.
 
-Let's suppose you want to authenticate the users at the url `api/auth/getToken` with a `POST` request. You can use the following code to create the API endpoint.
+### Frontend UI (Login Page & Component)
+If `customUI.login` is `false` (default), the module provides:
+- A login page at `/auth/login`.
+- An `<AuthLoginForm />` component used by this page. It's styled with Tailwind CSS and uses FormKit.
 
-Create a file at `/server/api/auth/getToken.post.ts` with the following code. Feel free to modify if your users table does not identify the users by their email and password but other fields.
-Do not forget to change `data.password` (coming from the user's request) to a **hashed password**.
+**Using the Default Login Page:**
+Simply navigate users to `/auth/login`.
 
+**Using the Login Form Component Manually:**
+If you disable the default page (`customUI: { login: true }`) but still want to use the form component:
+```vue
+<template>
+  <div>
+    <h1>My Custom Login Page</h1>
+    <AuthLoginForm />
+  </div>
+</template>
+
+<script setup lang="ts">
+// AuthLoginForm will be auto-imported if customUI.login is false,
+// or if you manually ensure components from the module are scanned.
+// If customUI.login is true, you might need to handle its availability or create your own.
+</script>
+```
+
+### Customizing or Disabling Default UI
+- **Disable all default login UI:** Set `nuxtTokenAuthentication: { customUI: { login: true } }`. You will then need to create your own login API endpoint, page, and form component.
+- **Override Components/Pages:** Nuxt 3's layering system allows you to override the module's components or pages by creating files with the same name in your project's `components/` or `pages/` directory. For example, to override the login form, create `~/components/AuthLoginForm.vue`. To override the page, create `~/pages/auth/login.vue`.
+
+## Access Token Handling
+
+- **Client-Side:** The `AuthLoginForm` (and your custom forms should do similarly) stores the received token in a cookie named `auth_token`. A client-side plugin automatically attaches this token as a `Bearer` token in the `Authorization` header (or the custom `tokenHeader`) for same-origin API requests that are not in `noAuthRoutes`.
+- **Server-Side:** A server middleware validates this token for protected API routes. If valid, user information is attached to `event.context.auth.user`.
+
+## Protecting API Routes
+All API routes (typically under `/api/`) are protected by default, except those listed in `noAuthRoutes`. The server middleware will return a `401 Unauthorized` error if a valid token is not provided for a protected route.
+
+Example of accessing the user in a protected API route:
 ```ts
-import bcrypt from "bcrypt";
-
+// server/api/me.get.ts
 export default defineEventHandler(async (event) => {
-  const db = useDatabase();
-  const data = await readBody(event);
+  // event.context.auth.user will be populated if the request is authenticated
+  const user = event.context.auth?.user;
 
-  const options = useRuntimeConfig().public.nuxtTokenAuthentication;
-
-  // for table names we need and extra {} - see https://github.com/unjs/db0/issues/77
-  const { rows } = await db.sql`
-    SELECT * FROM {${options.authTable}}
-    WHERE email = ${data.email}
-    LIMIT 1`;
-
-  const isPasswordValid = await bcrypt.compare(
-    data.password,
-    String(rows![0].password)
-  );
-  if (!isPasswordValid) {
-    throw createError({
-      status: 401,
-      message: "Username or password is incorrect!",
-    });
-  }
-
-  const user = rows ? rows[0] : undefined;
-  if (user) {
-    delete user.password;
-    // TODO you can generate a new token here on every login
+  if (!user) {
+    // This should ideally not happen if middleware is working, but good for safety
+    throw createError({ statusCode: 401, statusMessage: 'Unauthorized' });
   }
   return { user };
 });
 ```
 
-Now you can send a `POST` request to `/api/auth/getToken` with 2 fields in the body: `email` and `password`. If the user exists, the server will return the user's data, including the token, so you can store it in your local state or pinia store.
-Any other routes (except the ones you set in `noAuthRoutes`) will require the token to be sent in the header.
+## Protecting Pages (Client-Side Routing)
 
-> Do not forget to save the token in the local state or pinia store.
-
-## Implementing Route Access Control
-
-You can limit access to routes by adding a middleware. For example, the following code will redirect to `/admin/login` if the user is not logged in and the route starts with `/admin`.
+You can protect pages using Nuxt route middleware. Check for the presence of the `auth_token` cookie.
 
 ```ts
+// middleware/auth.ts
 export default defineNuxtRouteMiddleware((to, from) => {
-  const user = useState("user");
-  if (!user.value?.token && to.path.startsWith("/admin")) {
-    console.log("redirecting to login as user is not logged in");
-    return navigateTo("/admin/login");
+  // Skip middleware on server side for initial load, or handle appropriately
+  if (process.server) return;
+
+  const authToken = useCookie('auth_token');
+
+  // Define public routes that don't require authentication
+  const publicRoutes = ['/auth/login', '/register']; // Add other public page routes
+
+  if (!authToken.value && !publicRoutes.includes(to.path)) {
+    console.log('User not authenticated, redirecting to login.');
+    return navigateTo('/auth/login'); // Or your custom login path
   }
 });
+```
+Then apply this middleware to specific pages or layouts.
+```vue
+// pages/dashboard.vue
+<script setup lang="ts">
+definePageMeta({
+  middleware: 'auth'
+});
+</script>
 ```
 
 ## Development
