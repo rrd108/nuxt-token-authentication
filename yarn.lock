@@ -9318,10 +9318,10 @@ vitest-environment-nuxt@^1.0.1:
   dependencies:
     "@nuxt/test-utils" ">=3.13.1"
 
-vitest-mock-extended@^2.0.0:
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/vitest-mock-extended/-/vitest-mock-extended-2.0.2.tgz#bde329b0ca0cdfc2b0a3c71291e1af64559e23b2"
-  integrity sha512-n3MBqVITKyclZ0n0y66hkT4UiiEYFQn9tteAnIxT0MPz1Z8nFcPUG3Cf0cZOyoPOj/cq6Ab1XFw2lM/qM5EDWQ==
+vitest-mock-extended@^3.0.0:
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/vitest-mock-extended/-/vitest-mock-extended-3.1.1.tgz#7d02405831dc76f6ff80598aaaa953f7a7c23ac0"
+  integrity sha512-IQBKkEYB5BW4eJ+8JHZRzrLkKIJu5zkLJsU6u8vB+skSXbES+Di86nrUIbXwEQivDXcR4APMZFSvt398+iqKYA==
   dependencies:
     ts-essentials ">=10.0.0"
 
